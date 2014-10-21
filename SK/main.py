@@ -22,7 +22,7 @@ def getUserInfo(userId):
     r = requests.get(WEIBO_BASE+"users/show.json", params=payload)
     return r.text
 
-  def getUsersForKeyword(keyWord):
+def getUsersForKeyword(keyWord):
     payload = {'client_id': APP_KEY, 'access_token': ACCESS_TOKEN, 'q':keyWord, 'count':50}
     r = requests.get("https://api.weibo.com/2/search/suggestions/users.json", params=payload)
     return r.text

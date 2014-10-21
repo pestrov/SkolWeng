@@ -26,11 +26,23 @@ def getHotUsersForCategory(category):
     r = requests.get(WEIBO_BASE+"suggestions/users/hot.json", params=payload)
     return r.text
 
+def getUsersWithContent(content):
+    payload = {'client_id': APP_KEY, 'access_token': ACCESS_TOKEN, 'content':content, 'count':50}
+    r = requests.get(WEIBO_BASE+"suggestions/users/by_status.json", params=payload)
+    return r.text
+
 def getRelationship(uid1, uid2):
     payload = {'client_id': APP_KEY, 'access_token': ACCESS_TOKEN, 'source_id':uid1, 'target_id':uid2, 'count':50}
     r = requests.get(WEIBO_BASE+"friendships/show.json", params=payload)
     return r.text
 
+def getUserTrends(userId):
+    payload = {'client_id': APP_KEY, 'access_token': ACCESS_TOKEN, 'uid':userId, 'count':50}
+    r = requests.get(WEIBO_BASE+"trends.json", params=payload)
+    return r.text
 
+def getUserTags(userId):
+    payload = {'client_id': APP_KEY, 'access_token': ACCESS_TOKEN, 'uid':userId, 'count':50}
+    r = requests.get(WEIBO_BASE+"tags.json", params=payload)
+    return r.text
 
-print getUserStats([2100027704])

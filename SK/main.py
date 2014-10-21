@@ -1,26 +1,15 @@
 __author__ = 'denisantyukhov'
-from weibo import APIClient
-import webbrowser
 import requests
-
 
 APP_KEY = '3457835747'
 APP_SECRET = '04c6dac1c5eb0226c14e85a50ef9274d'
 CALLBACK_URL = 'https://github.com/gaphex'
+ACCESS_TOKEN = '2.00no3HpF_CjAmD38b962df537ZLw8B'
 
-client = APIClient(app_key=APP_KEY, app_secret=APP_SECRET, redirect_uri=CALLBACK_URL)
-url = client.get_authorize_url()
+def getUsersForKeyword(keyWord):
+    client_id = '3457835747'
+    payload = {'client_id': client_id, 'access_token': ACCESS_TOKEN, 'q':keyWord}
+    r = requests.get("https://api.weibo.com/2/search/suggestions/users.json", params=payload)
+    return r.text
 
-webbrowser.open(url, new=1, autoraise=True)
-code = raw_input()
-
-r = client.request_access_token(code)
-access_token = r.access_token
-expires_t = r.expires
-
-print access_token
-
-client = APIClient(app_key=APP_KEY, app_secret=APP_SECRET, redirect_uri=CALLBACK_URL,
-                   access_token=access_token, expires=expires_t)
-
-
+print getUsersForKeyword('Education')

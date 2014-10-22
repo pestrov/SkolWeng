@@ -2,11 +2,9 @@
 #!/usr/bin/env python
 
 from selenium import webdriver
-from collections import namedtuple
 import urllib
 import time
 import re
-
 
 dstrip = re.compile('[^0-9]+')
 def digits(s):
@@ -25,25 +23,11 @@ while True:
         time.sleep(0.1488)
 
 for i in elems:
-    cLikes = digits(i.find_element_by_css_selector("p.info a").text)
-    cReTweets = digits(i.find_element_by_css_selector("p i+a").text)
-    cUserId = digits(i.find_element_by_css_selector("p a").get_attribute('suda-data')[-15:])
-    if(cLikes!=''):
-        cLikes = int(cLikes)
-    else:
-        cLikes = 0
-    if(cReTweets!=''):
-        cReTweets = int(cReTweets)
-    else:
-        cReTweets = 0
-    if(cUserId!=''):
-        cUserId = int(cUserId)
-    else:
-        cUserId = 0
+
     d = {
-        "userId":     cUserId,
-        "retweets":   cReTweets,
-        "likes":      cLikes
+        "userId":     int("0"+digits(i.find_element_by_css_selector("p a").get_attribute('suda-data')[-15:])),
+        "retweets":   int("0"+digits(i.find_element_by_css_selector("p i+a").text)),
+        "likes":      int("0"+digits(i.find_element_by_css_selector("p.info a").text))
     }
     print d
 

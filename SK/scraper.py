@@ -58,5 +58,5 @@ if __name__ == "__main__":
     driver = webdriver.Chrome(chrome_options=chromeOptions)
     driver.set_script_timeout(1)
     login('ipestrov@gmail.com', '1234Sina1234*')
-    print get_page(u'研究', 30)
+    print get_page(sys.argv[1].decode('utf-8'), 100)
     driver.quit()

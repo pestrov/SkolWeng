@@ -53,6 +53,7 @@ def get_page(query, max_pages=1):
 if __name__ == "__main__":
     chromeOptions = webdriver.ChromeOptions()
     #prefs = {"profile.default_content_settings.images": 2}
+    prefs = {}
     chromeOptions.add_experimental_option("prefs", prefs)
     #chromeOptions.add_argument("--disable-javascript")
     driver = webdriver.Chrome(chrome_options=chromeOptions)

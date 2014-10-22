@@ -24,6 +24,7 @@ def wait_for(selector):
 def login(username, password):
     driver.get("http://weibo.com/login.php")
     wait_for(".W_login_form .info_list")
+    time.sleep(2)
     driver.find_element_by_css_selector(".inp.username input").send_keys(username)
     driver.find_element_by_css_selector(".inp.password input").send_keys(password)
     #driver.find_element_by_css_selector(".info_list.login_btn a").click()

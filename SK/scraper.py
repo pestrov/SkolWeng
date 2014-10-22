@@ -54,6 +54,7 @@ if __name__ == "__main__":
     chromeOptions = webdriver.ChromeOptions()
     prefs = {"profile.default_content_settings.images": 2}
     chromeOptions.add_experimental_option("prefs", prefs)
+    chromeOptions.add_argument("--disable-javascript")
     driver = webdriver.Chrome(chrome_options=chromeOptions)
     driver.set_script_timeout(1)
     login('ipestrov@gmail.com', '1234Sina1234*')

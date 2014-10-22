@@ -10,6 +10,10 @@ import time
 import re
 
 
+dstrip = re.compile('[^0-9]+')
+def digits(s):
+    return dstrip.sub('', s)
+
 query = u'研究'
 
 driver = webdriver.Chrome()
@@ -19,7 +23,6 @@ time.sleep(10)
 elems = driver.find_elements_by_css_selector("dd.content")
 
 for i in elems:
-    print "user", i.find_element_by_css_selector("p a").get_attribute('suda-data')
-    #print "likes", i.find_element_by_css_selector("p.info a").text
-    #print "likes", i.find_element_by_css_selector("p.info a").text
-    print "likes", i.find_element_by_css_selector("p.info a").text
+    print "user",       digits(i.find_element_by_css_selector("p a").get_attribute('suda-data')[-15:])
+    print "retweets",   digits(i.find_element_by_css_selector("p i+a").text)
+    print "likes",      digits(i.find_element_by_css_selector("p.info a").text)

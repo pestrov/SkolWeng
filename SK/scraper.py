@@ -27,25 +27,25 @@ def login(username, password):
     driver.find_element_by_css_selector(".inp.username input").send_keys(username)
     driver.find_element_by_css_selector(".inp.password input").send_keys(password)
     #driver.find_element_by_css_selector(".info_list.login_btn a").click()
-    time.sleep(8)
+    time.sleep(15)
     #driver.execute_script("document.getElementsByClassName('login_btn')[1].getElementsByTagName('a')[0].click();")
     #driver.execute_script("alert('Now click the button.')")
     #wait_for(".send_weibo")
 
 def get_page(query, page=0):
-    driver.get("http://s.weibo.com/wb/%s&xsort=hot" % urllib.quote(query.encode("utf-8")))
-
-    wait_for("dd.content")
     res = []
-    elems = driver.find_elements_by_css_selector("dd.content")
-    for i in elems:
-        d = {
-            "userId":     int("0"+digits(i.find_element_by_css_selector("p a").get_attribute('suda-data')[-15:])),
-            "retweets":   int("0"+digits(i.find_element_by_css_selector("p i+a").text)),
-            "likes":      int("0"+digits(i.find_element_by_css_selector("p.info a").text))
-        }
-        res += [d]
+    for page in xrange(1, 30):
+        driver.get("http://s.weibo.com/wb/%s&xsort=hot&page=%d" % (urllib.quote(query.encode("utf-8")), page))
 
+        wait_for("dd.content")
+        elems = driver.find_elements_by_css_selector("dd.content")
+        for i in elems:
+            d = {
+                "userId":     int("0"+digits(i.find_element_by_css_selector("p a").get_attribute('suda-data')[-15:])),
+                "retweets":   int("0"+digits(i.find_element_by_css_selector("p i+a").text)),
+                "likes":      int("0"+digits(i.find_element_by_css_selector("p.info a").text))
+            }
+            res += [d]
     return res
 
 

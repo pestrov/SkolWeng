@@ -7,7 +7,6 @@ import time
 import re
 import sys
 
-
 dstrip = re.compile('[^0-9]+')
 def digits(s):
     return dstrip.sub('', s)
@@ -41,9 +40,9 @@ def get_page(query, page=0):
     elems = driver.find_elements_by_css_selector("dd.content")
     for i in elems:
         d = {
-            "user":       digits(i.find_element_by_css_selector("p a").get_attribute('suda-data')[-15:]),
-            "retweets":   digits(i.find_element_by_css_selector("p i+a").text),
-            "likes":      digits(i.find_element_by_css_selector("p.info a").text)
+            "userId":     int("0"+digits(i.find_element_by_css_selector("p a").get_attribute('suda-data')[-15:])),
+            "retweets":   int("0"+digits(i.find_element_by_css_selector("p i+a").text)),
+            "likes":      int("0"+digits(i.find_element_by_css_selector("p.info a").text))
         }
         res += [d]
 

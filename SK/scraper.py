@@ -32,9 +32,9 @@ def login(username, password):
     #driver.execute_script("alert('Now click the button.')")
     #wait_for(".send_weibo")
 
-def get_page(query, page=0):
+def get_page(query, max_pages=1):
     res = []
-    for page in xrange(1, 30):
+    for page in xrange(1, max_pages+1):
         driver.get("http://s.weibo.com/wb/%s&xsort=hot&page=%d" % (urllib.quote(query.encode("utf-8")), page))
 
         wait_for("dd.content")
@@ -43,15 +43,19 @@ def get_page(query, page=0):
             d = {
                 "userId":     int("0"+digits(i.find_element_by_css_selector("p a").get_attribute('suda-data')[-15:])),
                 "retweets":   int("0"+digits(i.find_element_by_css_selector("p i+a").text)),
-                "likes":      int("0"+digits(i.find_element_by_css_selector("p.info a").text))
+                "likes":      int("0"+digits(i.find_element_by_css_selector("p.info a").text)),
+                "text":       i.find_element_by_css_selector("em").text
             }
             res += [d]
     return res
 
 
 if __name__ == "__main__":
-    driver = webdriver.Chrome()
+    chromeOptions = webdriver.ChromeOptions()
+    prefs = {"profile.default_content_settings.images": 2}
+    chromeOptions.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(chrome_options=chromeOptions)
     driver.set_script_timeout(1)
     login('ipestrov@gmail.com', '1234Sina1234*')
-    print get_page(u'研究')
+    print get_page(u'研究', 30)
     driver.quit()

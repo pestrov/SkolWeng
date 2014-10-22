@@ -1,0 +1,1 @@
+{"text": "", "userId": 1848688482, "retweets": 27, "likes": 36}

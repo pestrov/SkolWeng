@@ -10,3 +10,5 @@ Science
 Technology
 俄罗斯
 Russia
+精密科学
+Exact sciences

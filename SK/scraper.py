@@ -57,11 +57,11 @@ def get_relation(uid,mode, max_pages):
     else:
         driver.get("http://weibo.com/%s/fans?relate=follow" % uid)
     wait_for(".S_line1")
-    bitchyUid =  digits(driver.find_element_by_css_selector(".S_line1 a").get_attribute("href"))[:-7];
-    print bitchyUid
+    bitchyUid =  driver.find_element_by_css_selector(".S_line1 a").get_attribute("href").split('/')[3].split('?')[0];
+    print(bitchyUid)
     for page in xrange(1, max_pages+1):
+        print ("http://weibo.com/p/%s/follow?relate=%s&page=%d" % (bitchyUid, mode, page))
         driver.get("http://weibo.com/p/%s/follow?relate=%s&page=%d" % (bitchyUid, mode, page))
-
         wait_for("ul.cnfList")
         elems = driver.find_elements_by_css_selector("ul.cnfList div.connect")
 
@@ -91,7 +91,7 @@ if __name__ == "__main__":
     driver = webdriver.Chrome(chrome_options=chromeOptions)
     driver.set_script_timeout(1)
     login('ipestrov@gmail.com', '1234Sina1234*')
-    get_followers(int(sys.argv[1]), 10)
-    get_followings(int(sys.argv[1]), 10)
+    get_followers(3008492670, 10)
+
     #print get_page(sys.argv[1].decode('utf-8'), 50)#get_followers(2684112141,10)
     driver.quit()

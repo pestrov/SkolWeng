@@ -71,6 +71,7 @@ def get_following(uid, max_pages = 10):
     following = []
     driver.get("http://weibo.com/%s/follow" % uid)
     wait_for(".S_line1")
+   # print driver.find_element_by_css_selector(".W_pages a+a").get_attribute("href")
     for page in xrange(1, max_pages+1):
         driver.get("http://weibo.com/p/100505%s/follow?page=%d" % (uid, page))
         wait_for("ul.cnfList")
@@ -83,6 +84,8 @@ def get_following(uid, max_pages = 10):
                 "tweets":     int("0"+digits(i.find_element_by_css_selector("a+i+a+i+a").text)),
                 "userId":     int("0"+digits(i.find_element_by_css_selector("a+i+a+i+a").get_attribute("href")))
             }
+
+            #print i.find_element_by_css_selector("a+i+a+i+a").get_attribute("href")
             following += [d]
         filename = str(uid)+'.json'
         with open(filename,'w') as outfile:

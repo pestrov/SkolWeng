@@ -50,10 +50,10 @@ def get_page(query, max_pages=1):
             res += [d]
     return res
 
-def get_followers(uid, max_pages = 1):
+def get_relation(mode, uid, max_pages):
     followers = []
     for page in xrange(1, max_pages+1):
-        driver.get("http://weibo.com/p/%d/follow?relate=fans&page=%d" % (uid, page))
+        driver.get("http://weibo.com/p/%d/follow?relate=%s&page=%d" % (uid, mode, page))
 
         wait_for("ul.cnfList")
         elems = driver.find_elements_by_css_selector("ul.cnfList div.connect")
@@ -66,8 +66,14 @@ def get_followers(uid, max_pages = 1):
                 "userId":     int("0"+digits(i.find_element_by_css_selector("a+i+a+i+a").get_attribute("href")))
             }
             followers += [d]
-        print json.dumps(followers)
+        print mode, json.dumps(followers)
         followers = []
+
+def get_followers(uid, max_pages = 10):
+    get_relation(uid,'fans', max_pages)
+
+def get_followings(uid, max_pages = 1):
+    get_relation(uid,'follow', max_pages)
 
 if __name__ == "__main__":
     chromeOptions = webdriver.ChromeOptions()
@@ -78,6 +84,7 @@ if __name__ == "__main__":
     driver = webdriver.Chrome(chrome_options=chromeOptions)
     driver.set_script_timeout(1)
     login('ipestrov@gmail.com', '1234Sina1234*')
-    get_followers(int(sys.argv[1]),10)
+    get_followers(int(sys.argv[1]), 10)
+    get_followings(int(sys.argv[1]), 10)
     #print get_page(sys.argv[1].decode('utf-8'), 50)
     driver.quit()

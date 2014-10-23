@@ -26,6 +26,7 @@ def wait_for(selector):
 def login(username, password):
     driver.get("http://weibo.com/login.php")
     wait_for(".W_login_form .info_list")
+    time.sleep(2)
     driver.find_element_by_css_selector(".inp.username input").send_keys(username)
     driver.find_element_by_css_selector(".inp.password input").send_keys(password)
     time.sleep(15)
@@ -71,9 +72,10 @@ def get_following(uid, max_pages = 10):
     following = []
     driver.get("http://weibo.com/%s/follow" % uid)
     wait_for(".S_line1")
-   # print driver.find_element_by_css_selector(".W_pages a+a").get_attribute("href")
+    account_type = str(digits(driver.find_element_by_css_selector(".W_pages a+a").get_attribute("href")))[:6]
     for page in xrange(1, max_pages+1):
-        driver.get("http://weibo.com/p/100505%s/follow?page=%d" % (uid, page))
+        driver.get("http://weibo.com/p/%s%s/follow?page=%d" % (account_type, uid, page))
+        print "http://weibo.com/p/%s%s/follow?page=%d" % (account_type, uid, page)
         wait_for("ul.cnfList")
         elems = driver.find_elements_by_css_selector("ul.cnfList div.connect")
 

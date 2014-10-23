@@ -50,7 +50,7 @@ def get_page(query, max_pages=1):
             res += [d]
     return res
 
-def get_relation(mode, uid, max_pages):
+def get_relation(uid,mode, max_pages):
     followers = []
     for page in xrange(1, max_pages+1):
         driver.get("http://weibo.com/p/%d/follow?relate=%s&page=%d" % (uid, mode, page))

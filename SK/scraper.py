@@ -50,18 +50,13 @@ def get_page(query, max_pages=1):
             res += [d]
     return res
 
-def get_relation(uid,mode, max_pages):
+
+def get_followers(uid, max_pages = 10):
     followers = []
-    if mode == 'follow':
-         driver.get("http://weibo.com/%s/fans" % uid)
-    else:
-        driver.get("http://weibo.com/%s/fans?relate=follow" % uid)
+    driver.get("http://weibo.com/%s/fans" % uid)
     wait_for(".S_line1")
-    bitchyUid =  driver.find_element_by_css_selector(".S_line1 a").get_attribute("href").split('/')[3].split('?')[0];
-    print(bitchyUid)
     for page in xrange(1, max_pages+1):
-        print ("http://weibo.com/p/%s/follow?relate=%s&page=%d" % (bitchyUid, mode, page))
-        driver.get("http://weibo.com/p/%s/follow?relate=%s&page=%d" % (bitchyUid, mode, page))
+        driver.get("http://weibo.com/p/100505%s/follow?relate=fans&page=%d" % (uid, page))
         wait_for("ul.cnfList")
         elems = driver.find_elements_by_css_selector("ul.cnfList div.connect")
 
@@ -73,14 +68,31 @@ def get_relation(uid,mode, max_pages):
                 "userId":     int("0"+digits(i.find_element_by_css_selector("a+i+a+i+a").get_attribute("href")))
             }
             followers += [d]
-        print mode, json.dumps(followers)
+        print json.dumps(followers)
         followers = []
 
-def get_followers(uid, max_pages = 10):
-    get_relation(uid,'fans', max_pages)
+def get_following(uid, max_pages = 10):
+    following = []
+    driver.get("http://weibo.com/%s/follow" % uid)
+    wait_for(".S_line1")
+    for page in xrange(1, max_pages+1):
+        driver.get("http://weibo.com/p/100505%s/follow?page=%d" % (uid, page))
+        wait_for("ul.cnfList")
+        elems = driver.find_elements_by_css_selector("ul.cnfList div.connect")
 
-def get_followings(uid, max_pages = 1):
-    get_relation(uid,'follow', max_pages)
+        for i in elems:
+            d = {
+                "following":  int("0"+digits(i.find_element_by_css_selector("a").text)),
+                "followers":  int("0"+digits(i.find_element_by_css_selector("a+i+a").text)),
+                "tweets":     int("0"+digits(i.find_element_by_css_selector("a+i+a+i+a").text)),
+                "userId":     int("0"+digits(i.find_element_by_css_selector("a+i+a+i+a").get_attribute("href")))
+            }
+            following += [d]
+        print json.dumps(following)
+        following = []
+
+
+
 
 if __name__ == "__main__":
     chromeOptions = webdriver.ChromeOptions()
@@ -91,7 +103,7 @@ if __name__ == "__main__":
     driver = webdriver.Chrome(chrome_options=chromeOptions)
     driver.set_script_timeout(1)
     login('ipestrov@gmail.com', '1234Sina1234*')
-    get_followers(3008492670, 10)
+    get_following(1678843974, 10)
 
     #print get_page(sys.argv[1].decode('utf-8'), 50)#get_followers(2684112141,10)
     driver.quit()

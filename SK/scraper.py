@@ -86,5 +86,5 @@ if __name__ == "__main__":
     login('ipestrov@gmail.com', '1234Sina1234*')
     get_followers(int(sys.argv[1]), 10)
     get_followings(int(sys.argv[1]), 10)
-    #print get_page(sys.argv[1].decode('utf-8'), 50)
+    #print get_page(sys.argv[1].decode('utf-8'), 50)#get_followers(2684112141,10)
     driver.quit()

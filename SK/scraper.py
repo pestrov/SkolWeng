@@ -6,6 +6,7 @@ import urllib
 import time
 import re
 import sys
+import json
 
 dstrip = re.compile('[^0-9]+')
 def digits(s):
@@ -52,13 +53,11 @@ def get_page(query, max_pages=1):
 def get_followers(uid, max_pages = 1):
     followers = []
     for page in xrange(1, max_pages+1):
-        #print ("http://weibo.com/p/%d/follow?relate=fans&page=%d" % (uid, page))
         driver.get("http://weibo.com/p/%d/follow?relate=fans&page=%d" % (uid, page))
 
         wait_for("ul.cnfList")
         elems = driver.find_elements_by_css_selector("ul.cnfList div.connect")
-        #print elems
-        #print elems[1]
+
         for i in elems:
             d = {
                 "following":  int("0"+digits(i.find_element_by_css_selector("a").text)),
@@ -69,7 +68,6 @@ def get_followers(uid, max_pages = 1):
             followers += [d]
         print json.dumps(followers)
         followers = []
-    #return followers
 
 if __name__ == "__main__":
     chromeOptions = webdriver.ChromeOptions()
@@ -80,6 +78,6 @@ if __name__ == "__main__":
     driver = webdriver.Chrome(chrome_options=chromeOptions)
     driver.set_script_timeout(1)
     login('ipestrov@gmail.com', '1234Sina1234*')
-    #print get_followers(1002063206472652,20)
+    get_followers(int(sys.argv[1]),10)
     #print get_page(sys.argv[1].decode('utf-8'), 50)
     driver.quit()

@@ -49,25 +49,27 @@ def get_page(query, max_pages=1):
             res += [d]
     return res
 
-def get_folowers(uid, max_pages = 1):
+def get_followers(uid, max_pages = 1):
     followers = []
     for page in xrange(1, max_pages+1):
-        print ("http://weibo.com/p/%d/follow?relate=fans&page=%d" % (uid, page))
+        #print ("http://weibo.com/p/%d/follow?relate=fans&page=%d" % (uid, page))
         driver.get("http://weibo.com/p/%d/follow?relate=fans&page=%d" % (uid, page))
 
-        wait_for("div.connect")
-        elems = driver.find_elements_by_css_selector("div.connect")
-        print elems
-        print elems[1]
+        wait_for("ul.cnfList")
+        elems = driver.find_elements_by_css_selector("ul.cnfList div.connect")
+        #print elems
+        #print elems[1]
         for i in elems:
             d = {
-                "userId":     int("0"+digits(i.find_element_by_css_selector("a").get_attribute('suda-data')[-15:])),
-                "retweets":   int("0"+digits(i.find_element_by_css_selector("p i+a").text)),
-                "likes":      int("0"+digits(i.find_element_by_css_selector("p.info a").text)),
-                "text":       i.find_element_by_css_selector("em").text
+                "following":  int("0"+digits(i.find_element_by_css_selector("a").text)),
+                "followers":  int("0"+digits(i.find_element_by_css_selector("a+i+a").text)),
+                "tweets":     int("0"+digits(i.find_element_by_css_selector("a+i+a+i+a").text)),
+                "userId":     int("0"+digits(i.find_element_by_css_selector("a+i+a+i+a").get_attribute("href")))
             }
             followers += [d]
-    return followers
+        print json.dumps(followers)
+        followers = []
+    #return followers
 
 if __name__ == "__main__":
     chromeOptions = webdriver.ChromeOptions()
@@ -78,6 +80,6 @@ if __name__ == "__main__":
     driver = webdriver.Chrome(chrome_options=chromeOptions)
     driver.set_script_timeout(1)
     login('ipestrov@gmail.com', '1234Sina1234*')
-    print get_folowers(1002063206472652,20)
+    #print get_followers(1002063206472652,20)
     #print get_page(sys.argv[1].decode('utf-8'), 50)
     driver.quit()

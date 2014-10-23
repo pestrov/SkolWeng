@@ -21,3 +21,6 @@ for key, value in graph.iteritems():
     if len(value) >= maxLen:
         maxLen = len(value)
         print maxLen
+        print key
+
+#def calculateInfluencerImpact():

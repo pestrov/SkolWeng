@@ -1,15 +1,13 @@
 import json
-json_data=open('uniques.json')
+json_data=open('userInfos.json')
 
 data = json.load(json_data)
 
 
 greatUsers = []
 
-for key, value in data.iteritems():
-    if len(value["tag"]) > 1 and value["likes"] >= 5:
-
-        greatUsers.append(value["userId"])
+for key in data:
+ print
 
 
 unique = set(greatUsers)

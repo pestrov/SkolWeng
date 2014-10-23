@@ -5,6 +5,7 @@ APP_KEY = '3457835747'
 APP_SECRET = '04c6dac1c5eb0226c14e85a50ef9274d'
 ACCESS_TOKEN = '2.00no3HpF_CjAmD38b962df537ZLw8B'
 WEIBO_BASE = 'https://api.weibo.com/2/'
+users = [5016338752, 3237705130, 1642632622, 2418433987, 2410528240]
 
 def getUserInfo(userId):
     payload = {'access_token':ACCESS_TOKEN,'uid':userId}
@@ -46,3 +47,8 @@ def getUserTags(userId):
     r = requests.get(WEIBO_BASE+"tags.json", params=payload)
     return r.text
 
+userStats = []
+for user in users:
+    userStat = getUserStats(user)
+    userStats.append(userStat)
+    print userStat

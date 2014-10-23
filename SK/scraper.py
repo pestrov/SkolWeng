@@ -52,8 +52,15 @@ def get_page(query, max_pages=1):
 
 def get_relation(uid,mode, max_pages):
     followers = []
+    if mode == 'follow':
+         driver.get("http://weibo.com/%s/follow" % uid)
+    else:
+        driver.get("http://weibo.com/%s/follow?relate=fans" % uid)
+    wait_for(".S_line1")
+    bitchyUid =  digits(driver.find_element_by_css_selector(".S_line1 a").get_attribute("href"))[:-7];
+    print bitchyUid
     for page in xrange(1, max_pages+1):
-        driver.get("http://weibo.com/p/%d/follow?relate=%s&page=%d" % (uid, mode, page))
+        driver.get("http://weibo.com/p/%s/follow?relate=%s&page=%d" % (bitchyUid, mode, page))
 
         wait_for("ul.cnfList")
         elems = driver.find_elements_by_css_selector("ul.cnfList div.connect")

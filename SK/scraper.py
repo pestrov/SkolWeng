@@ -81,8 +81,9 @@ def get_following(uid, max_pages = 10):
                 "following":  int("0"+digits(i.find_element_by_css_selector("a").text)),
                 "followers":  int("0"+digits(i.find_element_by_css_selector("a+i+a").text)),
                 "tweets":     int("0"+digits(i.find_element_by_css_selector("a+i+a+i+a").text)),
-                "userId":     int("0"+digits(i.find_element_by_css_selector("a+i+a+i+a").get_attribute("href")))
+                "userId":     int("0"+digits(i.find_element_by_css_selector("a").get_attribute("href")))
             }
+            #print i.find_element_by_css_selector("a").get_attribute("href")
             following += [d]
         filename = str(uid)+'.json'
         with open(filename,'w') as outfile:

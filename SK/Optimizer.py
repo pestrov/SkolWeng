@@ -36,7 +36,8 @@ users = [1823975091, 1650111241, 1859586112, 1784473157, 1850988623, 2286908003,
 postsDictFile=open('userPostsByUserId.json')
 postsDict = json.load(postsDictFile)
 
-postsImpact = {}
+likesImpact = {}
+retweetsImpact = {}
 for key, userPosts in postsDict.iteritems():
     likes = 0
     retweets = 0
@@ -44,10 +45,11 @@ for key, userPosts in postsDict.iteritems():
     for postInfo in userPosts:
         likes+=postInfo["likes"]
         retweets+=postInfo["retweets"]
-    impact = float(likes)/postsNumber
-    print impact
-    postsImpact[key] = impact
-print postsImpact
+    impact = float(likes)/postsNumber+float(retweets)/postsNumber
+    likesImpact[key] = float(likes)/postsNumber
+    retweetsImpact[key] = float(retweets)/postsNumber
+sortedUids = likesImpact.keys()
+sortedUids.sort()
 
 #FolowersImpact
 statsFile=open('userStats.json')
@@ -56,8 +58,73 @@ userStats = json.load(statsFile)
 statsImpact = {}
 for userInfo in userStats:
     statsImpact[str(userInfo["id"])] = math.log(userInfo["followers_count"])
-    print statsImpact[str(userInfo["id"])]
-print statsImpact
+    #print statsImpact[str(userInfo["id"])]
+
 
 with open('impacts.json','w') as outfile:
-    json.dump({"posts":postsImpact,"followers":statsImpact},outfile)
+    json.dump({"likes":likesImpact,"retweets":retweetsImpact,"followers":statsImpact},outfile)
+
+retweetsList = []
+likesList = []
+followersList = []
+for uid in sortedUids:
+    retweetsList.append(retweetsImpact[uid])
+    likesList.append(likesImpact[uid])
+    followersList.append(statsImpact[uid])
+print retweetsList
+print likesList
+print followersList
+
+
+def addCostsFromFile(filename, influencerUid, costs,infleunce):
+    json_data=open('xFiles/' + filename)
+    data = json.load(json_data)
+    for user in data:
+        if str(user["userId"]) in connectedGraph:
+            print user
+            if str(user["userId"]) in costs:
+                costs[str(user["userId"])] = costs[str(user["userId"])] + math.log(user["followers"]+1)/math.log(user["tweets"]+2)
+                infleunce[str(user["userId"])] = infleunce[str(user["userId"])] + math.log(user["followers"]+1)
+            else:
+                costs[str(user["userId"])] = math.log(user["followers"]+1)/math.log(user["tweets"]+2)
+                infleunce[str(user["userId"])] =  math.log(user["followers"]+1)
+
+
+costs = {}
+infleunce = {}
+
+for fileName in os.listdir('xFiles/'):
+    influencerUid = fileName.split('.')[0]
+    addCostsFromFile(fileName, influencerUid,costs, infleunce)
+print len(costs)
+print len(infleunce)
+sortedFacilitiesUids = costs.keys()
+sortedFacilitiesUids.sort()
+
+costsList = []
+ownInfList = []
+for uid in sortedFacilitiesUids:
+    costsList.append(costs[uid])
+    ownInfList.append(infleunce[uid])
+
+connections = []
+for uid in sortedFacilitiesUids:
+    connections.append(len(connectedGraph[uid]))
+
+#print "Connections"
+#print connections
+
+# print "Own Influence"
+# print ownInfList
+# print "Costs"
+# print costsList
+#
+# print "Retweets"
+# print retweetsList
+# print "Likes"
+# print likesList
+# print "Followers"
+# print followersList
+#for facilityId, influencersIds in connectedGraph.iteritems():
+
+#print connectedGraph

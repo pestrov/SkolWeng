@@ -107,10 +107,17 @@ for uid in sortedFacilitiesUids:
     costsList.append(costs[uid])
     ownInfList.append(infleunce[uid])
 
+print sortedFacilitiesUids
 connections = []
-for uid in sortedFacilitiesUids:
-    connections.append(len(connectedGraph[uid]))
-
+for facil in sortedFacilitiesUids:
+    conns = []
+    for uid in sortedUids:
+        if uid in connectedGraph[facil]:
+            conns.append(1)
+        else:
+            conns.append(0)
+    connections.append(conns)
+print connections
 #print "Connections"
 #print connections
 

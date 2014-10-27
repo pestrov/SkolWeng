@@ -1,4 +1,4 @@
-import os, json
+"import os, json
 import math
 
 def addNodesFromFile(filename, influencerUid, graph):
@@ -109,6 +109,7 @@ for uid in sortedFacilitiesUids:
 
 print sortedFacilitiesUids
 connections = []
+openFacilities = []
 for facil in sortedFacilitiesUids:
     conns = []
     for uid in sortedUids:
@@ -117,7 +118,7 @@ for facil in sortedFacilitiesUids:
         else:
             conns.append(0)
     connections.append(conns)
-print connections
+#print connections
 #print "Connections"
 #print connections
 
